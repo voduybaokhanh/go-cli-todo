@@ -9,14 +9,17 @@ const filePath = "tasks.json"
 
 func LoadTasks() ([]Task, error) {
 	var tasks []Task
-	file, err := os.ReadFile(filePath)
+	data, err := os.ReadFile(filePath)
 	if err != nil {
 		if os.IsNotExist(err) {
 			return tasks, nil // file chưa có -> trả về rỗng
 		}
 		return nil, err
 	}
-	err = json.Unmarshal(file, &tasks)
+	if len(data) == 0 { // file rỗng
+		return tasks, nil
+	}
+	err = json.Unmarshal(data, &tasks)
 	return tasks, err
 }
 
